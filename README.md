@@ -1,5 +1,4 @@
 <div align="center">
-
 <img src="frontend/public/favicon.svg" width="72" alt="Dendra logo" />
 
 # Dendra
@@ -9,7 +8,11 @@
 Highlight any part of a reply to bookmark it, or ask about it in a side branch without derailing the main conversation.
 Sign in with your ChatGPT account, and your chats are stored only on your Mac.
 
-React · TypeScript · IndexedDB · Electron
+<img src="https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React 19" />
+<img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+<img src="https://img.shields.io/badge/💾_IndexedDB-FFCA28?style=for-the-badge" alt="IndexedDB" />
+<img src="https://img.shields.io/badge/Electron-47848F?style=for-the-badge&logo=electron&logoColor=white" alt="Electron" />
+<img src="https://img.shields.io/badge/macOS-000000?style=for-the-badge&logo=apple&logoColor=white" alt="macOS" />
 
 </div>
 
