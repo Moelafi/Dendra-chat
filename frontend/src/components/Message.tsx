@@ -68,7 +68,8 @@ export const Message = memo(function Message({
     }
     for (const b of bookmarks) add(`bm-${b.color}`, b)
     for (const t of branches) if (t.anchor) add('anchor', t.anchor)
-    if (flashUntil && focusSpan) add('flash', { text: text.slice(focusSpan.start, focusSpan.end), start: focusSpan.start!, end: focusSpan.end! })
+    if (flashUntil && focusSpan)
+      add('flash', { text: text.slice(focusSpan.start, focusSpan.end), start: focusSpan.start!, end: focusSpan.end! })
     setHighlights(owner, entries)
   }, [owner, node.content, streaming, bookmarks, branches, flashUntil, focusSpan])
 
@@ -127,7 +128,13 @@ export const Message = memo(function Message({
                 : `md prose prose-invert max-w-none text-[15px] leading-7 prose-p:my-3 prose-pre:my-0 ${streaming ? 'caret' : ''}`
             }
           >
-            {isUser ? node.content : node.content ? <Markdown content={node.content} /> : streaming ? <Thinking /> : null}
+            {isUser ? (
+              node.content
+            ) : node.content ? (
+              <Markdown content={node.content} />
+            ) : streaming ? (
+              <Thinking />
+            ) : null}
           </div>
         </div>
 
@@ -149,7 +156,9 @@ export const Message = memo(function Message({
           </div>
         )}
 
-        <div className={`mt-1.5 flex min-h-7 flex-wrap items-center gap-1 text-xs text-faint ${isUser ? 'justify-end' : ''}`}>
+        <div
+          className={`mt-1.5 flex min-h-7 flex-wrap items-center gap-1 text-xs text-faint ${isUser ? 'justify-end' : ''}`}
+        >
           {!streaming && node.content && (
             <button
               type="button"

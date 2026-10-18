@@ -15,7 +15,12 @@ export function EmptyState() {
       <h1 className="mb-8 text-center text-3xl font-normal tracking-tight text-fg md:text-[40px]">
         What would you like to explore?
       </h1>
-      <Composer threadId={null} streamingNodeId={null} autoFocus onStarted={(id) => navigate(id, undefined, { replace: true })} />
+      <Composer
+        threadId={null}
+        streamingNodeId={null}
+        autoFocus
+        onStarted={(id) => navigate(id, undefined, { replace: true })}
+      />
       <div className="mt-14 grid w-full max-w-3xl gap-6 sm:grid-cols-3">
         {tips.map(({ icon: Icon, title, body }) => (
           <div key={title} className="flex flex-col items-center text-center">

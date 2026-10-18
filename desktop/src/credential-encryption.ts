@@ -1,7 +1,10 @@
 import type { SafeStorage } from 'electron'
 import type { CredentialEncryption } from '../vendor/siwc-local/src/index.js'
 
-type StorageAPI = Pick<SafeStorage, 'isEncryptionAvailable' | 'encryptString' | 'decryptString' | 'getSelectedStorageBackend'>
+type StorageAPI = Pick<
+  SafeStorage,
+  'isEncryptionAvailable' | 'encryptString' | 'decryptString' | 'getSelectedStorageBackend'
+>
 
 /**
  * Encrypts ChatGPT credentials at rest with Electron's safeStorage (macOS Keychain).
@@ -15,7 +18,10 @@ export function createElectronCredentialEncryption(
   const isAvailable = () => {
     if (!isReady() || !storage.isEncryptionAvailable()) return false
     // Electron's Linux basic_text backend uses a hardcoded key. Refuse it.
-    return platform !== 'linux' || ['gnome_libsecret', 'kwallet', 'kwallet5', 'kwallet6'].includes(storage.getSelectedStorageBackend())
+    return (
+      platform !== 'linux' ||
+      ['gnome_libsecret', 'kwallet', 'kwallet5', 'kwallet6'].includes(storage.getSelectedStorageBackend())
+    )
   }
   const requireAvailable = () => {
     if (!isAvailable()) throw new Error('OS credential encryption is unavailable.')

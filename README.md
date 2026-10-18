@@ -5,7 +5,7 @@
 
 **A chat app for thinking in branches, not in one long scroll.** 🌳
 
-Highlight any part of a reply to bookmark it, or ask about it in a side branch without derailing the main conversation.
+Highlight any part of a reply and ask about it in a side branch, without derailing the main conversation. Bookmark the bits worth coming back to.
 Sign in with your ChatGPT account, and your chats are stored only on your Mac.
 
 <img src="https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React 19" />
@@ -39,7 +39,6 @@ Dendra treats a conversation as a **tree** instead of a list.
 - 🪜 **Branches of branches.** Branch from a branch as deep as you like. A breadcrumb shows where you are (*Main › Branch › Sub-branch*), and Back / Forward work like in a browser.
 - 🔖 **Bookmarks with colours and notes.** Highlight a sentence and save it with a colour tag and an optional note. Bookmarks are painted right on the text and collected in a side panel you can search and filter by colour. Click one to jump straight back to that exact sentence.
 - 📑 **Your messages as a table of contents.** The *Messages* tab lists every message you've sent in the chat, across all branches. Click one to jump to it.
-- 📖 **Reading-friendly streaming.** When you send a message it moves to the top of the screen and the reply fills in below it. The page doesn't scroll on its own, so you can read at your own pace.
 - ✂️ **Close branches you're done with.** Delete a branch (and its sub-branches) from the breadcrumb, with undo.
 
 ## 🔒 Your data stays on your machine
@@ -70,33 +69,6 @@ npm run dev
 This starts the frontend dev server if it isn't already running, builds the Electron main process and opens the Dendra window. Click **Continue with ChatGPT**, sign in in your browser and allow plan usage. You can check your usage or sign out from the account menu at the bottom of the sidebar.
 
 > 💡 If `npm run dev` starts Electron as plain Node, your terminal has `ELECTRON_RUN_AS_NODE` set (VS Code's terminal does this). The dev script removes it for the Electron process, but launching Electron another way may need `unset ELECTRON_RUN_AS_NODE`.
-
-## 🗂️ Project structure
-
-```
-frontend/   React app (the UI Electron loads)
-  src/db/       IndexedDB schema, tree helpers and all data operations
-  src/lib/      streaming, highlights, text offsets, splash animation
-  src/api/      model access through the Electron bridge
-  src/components/
-desktop/    Electron shell with Sign in with ChatGPT
-  src/main.ts     window, IPC handlers, ChatGPT session
-  src/preload.ts  the only API the UI gets: session state and text streaming
-```
-
-## 🛠️ Development
-
-```bash
-cd frontend
-npm test          # Vitest: data operations and conversation-tree logic
-npm run lint      # oxlint
-npm run build     # type-check and production build
-
-cd ../desktop
-npm run typecheck
-```
-
-**Tech stack:** React 19, TypeScript, Vite, Tailwind CSS 4, Dexie (IndexedDB), Zustand, react-markdown with syntax highlighting, Electron with Sign in with ChatGPT.
 
 ## 📜 Licensing note
 

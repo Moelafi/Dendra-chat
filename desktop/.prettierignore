@@ -1,0 +1,4 @@
+dist
+package-lock.json
+# Vendored unmodified, see vendor/siwc-local/VENDORED.md
+vendor

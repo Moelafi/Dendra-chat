@@ -36,7 +36,9 @@ export function BookmarksPanel() {
 
   const q = debounced.trim().toLowerCase()
   const bookmarks = (data?.bookmarks ?? []).filter(
-    (b) => (!colors.length || colors.includes(b.color)) && (!q || b.text.toLowerCase().includes(q) || b.note.toLowerCase().includes(q)),
+    (b) =>
+      (!colors.length || colors.includes(b.color)) &&
+      (!q || b.text.toLowerCase().includes(q) || b.note.toLowerCase().includes(q)),
   )
   const messages = (data?.messages ?? []).filter((n) => !q || n.content.toLowerCase().includes(q))
   /** Branch title for items inside a branch; null on the main thread. */
@@ -97,7 +99,11 @@ export function BookmarksPanel() {
               )
             })}
             {colors.length > 0 && (
-              <button type="button" onClick={() => setColors([])} className="ml-auto text-[11px] text-faint hover:text-fg">
+              <button
+                type="button"
+                onClick={() => setColors([])}
+                className="ml-auto text-[11px] text-faint hover:text-fg"
+              >
                 Clear
               </button>
             )}
@@ -108,7 +114,11 @@ export function BookmarksPanel() {
         {tab === 'bookmarks' ? (
           <>
             {bookmarks.length === 0 && (
-              <Empty>{data?.bookmarks.length ? 'No bookmarks match.' : 'Highlight text in any message and choose Bookmark to save it here.'}</Empty>
+              <Empty>
+                {data?.bookmarks.length
+                  ? 'No bookmarks match.'
+                  : 'Highlight text in any message and choose Bookmark to save it here.'}
+              </Empty>
             )}
             {bookmarks.map((b) => (
               <BookmarkItem key={b.id} bookmark={b} threadTitle={branchTitle(b.threadId)} />
@@ -117,7 +127,9 @@ export function BookmarksPanel() {
         ) : (
           <>
             {messages.length === 0 && (
-              <Empty>{data?.messages.length ? 'No messages match.' : 'Messages you send in this chat show up here.'}</Empty>
+              <Empty>
+                {data?.messages.length ? 'No messages match.' : 'Messages you send in this chat show up here.'}
+              </Empty>
             )}
             <div className="space-y-2 px-1">
               {messages.map((n) => (
@@ -152,7 +164,9 @@ function MessageItem({ node }: { node: MsgNode }) {
       onClick={() => openThread(node.threadId, { nodeId: node.id })}
       className="block w-full rounded-2xl bg-surface px-3.5 py-2.5 text-left transition hover:bg-raised"
     >
-      <div className="line-clamp-3 whitespace-pre-wrap break-words text-[13px] leading-relaxed text-fg">{node.content}</div>
+      <div className="line-clamp-3 whitespace-pre-wrap break-words text-[13px] leading-relaxed text-fg">
+        {node.content}
+      </div>
     </button>
   )
 }
@@ -168,39 +182,55 @@ function BookmarkItem({ bookmark: b, threadTitle }: { bookmark: Bookmark; thread
       <div className="flex gap-2.5">
         <span className={`mt-1.5 size-2 shrink-0 rounded-full ${colorClass[b.color].dot}`} />
         <div className="min-w-0 flex-1">
-      {b.note && !editing && <div className="mb-0.5 text-[13px] text-fg">{b.note}</div>}
-      <div className="line-clamp-3 text-xs leading-relaxed text-muted">{b.text}</div>
-      {editing && (
-        <input
-          autoFocus
-          value={note}
-          onClick={(e) => e.stopPropagation()}
-          onChange={(e) => setNote(e.target.value)}
-          onBlur={() => {
-            setEditing(false)
-            void db.bookmarks.update(b.id, { note: note.trim() })
-          }}
-          onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
-          placeholder="Note"
-          className="mt-1.5 w-full rounded-lg border border-line bg-surface px-2 py-1 text-xs text-fg focus:outline-none"
-        />
-      )}
-      <div className="mt-1.5 flex min-h-5 items-center gap-1 text-[11px] text-faint">
-        {threadTitle && <BranchLabel title={threadTitle} />}
-        <div className="ml-auto hidden items-center gap-0.5 group-hover:flex" onClick={(e) => e.stopPropagation()}>
-          {BOOKMARK_COLORS.filter((c) => c !== b.color).map((c) => (
-            <button key={c} type="button" title={colorClass[c].label} onClick={() => db.bookmarks.update(b.id, { color: c })} className="p-0.5">
-              <span className={`block size-2 rounded-full ${colorClass[c].dot} opacity-60 hover:opacity-100`} />
-            </button>
-          ))}
-          <button type="button" onClick={() => setEditing(true)} className="rounded p-1 hover:text-fg" title="Edit note">
-            <FiEdit2 />
-          </button>
-          <button type="button" onClick={() => db.bookmarks.delete(b.id)} className="rounded p-1 hover:text-red-300" title="Delete">
-            <FiTrash2 />
-          </button>
-        </div>
-      </div>
+          {b.note && !editing && <div className="mb-0.5 text-[13px] text-fg">{b.note}</div>}
+          <div className="line-clamp-3 text-xs leading-relaxed text-muted">{b.text}</div>
+          {editing && (
+            <input
+              autoFocus
+              value={note}
+              onClick={(e) => e.stopPropagation()}
+              onChange={(e) => setNote(e.target.value)}
+              onBlur={() => {
+                setEditing(false)
+                void db.bookmarks.update(b.id, { note: note.trim() })
+              }}
+              onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
+              placeholder="Note"
+              className="mt-1.5 w-full rounded-lg border border-line bg-surface px-2 py-1 text-xs text-fg focus:outline-none"
+            />
+          )}
+          <div className="mt-1.5 flex min-h-5 items-center gap-1 text-[11px] text-faint">
+            {threadTitle && <BranchLabel title={threadTitle} />}
+            <div className="ml-auto hidden items-center gap-0.5 group-hover:flex" onClick={(e) => e.stopPropagation()}>
+              {BOOKMARK_COLORS.filter((c) => c !== b.color).map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  title={colorClass[c].label}
+                  onClick={() => db.bookmarks.update(b.id, { color: c })}
+                  className="p-0.5"
+                >
+                  <span className={`block size-2 rounded-full ${colorClass[c].dot} opacity-60 hover:opacity-100`} />
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={() => setEditing(true)}
+                className="rounded p-1 hover:text-fg"
+                title="Edit note"
+              >
+                <FiEdit2 />
+              </button>
+              <button
+                type="button"
+                onClick={() => db.bookmarks.delete(b.id)}
+                className="rounded p-1 hover:text-red-300"
+                title="Delete"
+              >
+                <FiTrash2 />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

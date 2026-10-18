@@ -37,7 +37,17 @@ function capture(): Captured | null {
   if (!startMsg && !endMsg) return null
   const rect = range.getBoundingClientRect()
   if (!startMsg || startMsg !== endMsg) {
-    return { nodeId: '', threadId: '', text: '', start: 0, end: 0, prefix: '', suffix: '', rect, blocked: 'Select text within a single message' }
+    return {
+      nodeId: '',
+      threadId: '',
+      text: '',
+      start: 0,
+      end: 0,
+      prefix: '',
+      suffix: '',
+      rect,
+      blocked: 'Select text within a single message',
+    }
   }
   const full = contentText(startMsg)
   const start = offsetOf(startMsg, range.startContainer, range.startOffset)
@@ -156,7 +166,12 @@ export function SelectionToolbar() {
   // Keep the toolbar on screen even when the selection is partly scrolled out of view.
   const above = cap.rect.top > 220
   const anchorY = Math.max(80, Math.min(above ? cap.rect.top - 10 : cap.rect.bottom + 10, window.innerHeight - 80))
-  const style = { left, top: anchorY, width: mode === 'menu' ? 'max-content' : width, transform: above ? 'translateY(-100%)' : undefined }
+  const style = {
+    left,
+    top: anchorY,
+    width: mode === 'menu' ? 'max-content' : width,
+    transform: above ? 'translateY(-100%)' : undefined,
+  }
 
   return (
     <div
@@ -174,12 +189,7 @@ export function SelectionToolbar() {
         <div className="flex items-center gap-1">
           <ToolButton onClick={() => setMode('bookmark')} icon={<FiBookmark />} label="Bookmark" />
           <ToolButton onClick={() => setMode('ask')} icon={<FiMessageCircle />} label="Ask about this" />
-          <ToolButton
-            onClick={() => copy(cap.text)}
-            icon={copied ? <FiCheck /> : <FiCopy />}
-            label=""
-            title="Copy"
-          />
+          <ToolButton onClick={() => copy(cap.text)} icon={copied ? <FiCheck /> : <FiCopy />} label="" title="Copy" />
         </div>
       ) : mode === 'bookmark' ? (
         <div className="space-y-2 p-1.5">
@@ -259,7 +269,17 @@ export function SelectionToolbar() {
   )
 }
 
-function ToolButton({ onClick, icon, label, title }: { onClick: () => void; icon: React.ReactNode; label: string; title?: string }) {
+function ToolButton({
+  onClick,
+  icon,
+  label,
+  title,
+}: {
+  onClick: () => void
+  icon: React.ReactNode
+  label: string
+  title?: string
+}) {
   return (
     <button
       type="button"

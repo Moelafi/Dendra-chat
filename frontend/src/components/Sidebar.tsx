@@ -21,7 +21,12 @@ export function Sidebar({ onCollapse }: { onCollapse: () => void }) {
       <div className="flex h-14 items-center gap-2 px-4">
         <Logo className="size-5 shrink-0" />
         <span className="flex-1 font-brand text-lg font-semibold text-fg">Dendra</span>
-        <button type="button" onClick={onCollapse} className="rounded-lg p-2 text-faint transition hover:bg-surface hover:text-fg" title="Hide sidebar">
+        <button
+          type="button"
+          onClick={onCollapse}
+          className="rounded-lg p-2 text-faint transition hover:bg-surface hover:text-fg"
+          title="Hide sidebar"
+        >
           <FiSidebar />
         </button>
       </div>
@@ -38,7 +43,11 @@ export function Sidebar({ onCollapse }: { onCollapse: () => void }) {
       <div className="scrollbar-thin flex-1 overflow-y-auto px-2 pb-4">
         {conversations?.length === 0 && <p className="px-3 py-2 text-sm text-faint">No conversations yet.</p>}
         {conversations?.map((c) => (
-          <ConversationItem key={c.id} conversation={c} threads={(threads ?? []).filter((t) => t.conversationId === c.id)} />
+          <ConversationItem
+            key={c.id}
+            conversation={c}
+            threads={(threads ?? []).filter((t) => t.conversationId === c.id)}
+          />
         ))}
       </div>
       <AccountMenu />
@@ -69,12 +78,25 @@ function ConversationItem({ conversation, threads }: { conversation: Conversatio
           await deleteConversation(conversation.id)
         }}
       />
-      {open && branches.map((b) => <BranchItem key={b.id} thread={b} threads={threads} depth={1} activeId={currentThreadId} />)}
+      {open &&
+        branches.map((b) => (
+          <BranchItem key={b.id} thread={b} threads={threads} depth={1} activeId={currentThreadId} />
+        ))}
     </div>
   )
 }
 
-function BranchItem({ thread, threads, depth, activeId }: { thread: Thread; threads: Thread[]; depth: number; activeId: string | null }) {
+function BranchItem({
+  thread,
+  threads,
+  depth,
+  activeId,
+}: {
+  thread: Thread
+  threads: Thread[]
+  depth: number
+  activeId: string | null
+}) {
   const children = threads.filter((t) => t.parentThreadId === thread.id)
   const [open, setOpen] = useState(true)
   return (
@@ -91,7 +113,10 @@ function BranchItem({ thread, threads, depth, activeId }: { thread: Thread; thre
         onRename={(title) => db.threads.update(thread.id, { title, titled: true })}
         onDelete={() => closeBranch(thread.id)}
       />
-      {open && children.map((c) => <BranchItem key={c.id} thread={c} threads={threads} depth={depth + 1} activeId={activeId} />)}
+      {open &&
+        children.map((c) => (
+          <BranchItem key={c.id} thread={c} threads={threads} depth={depth + 1} activeId={activeId} />
+        ))}
     </>
   )
 }
@@ -112,13 +137,29 @@ interface RowProps {
   onDelete: () => void
 }
 
-function Row({ depth = 0, active, highlighted, icon, title, onClick, toggle, unread, hiddenUnread, onRename, onDelete }: RowProps) {
+function Row({
+  depth = 0,
+  active,
+  highlighted,
+  icon,
+  title,
+  onClick,
+  toggle,
+  unread,
+  hiddenUnread,
+  onRename,
+  onDelete,
+}: RowProps) {
   const [editing, setEditing] = useState(false)
   const [value, setValue] = useState(title)
   return (
     <div
       className={`group relative flex items-center gap-1.5 rounded-xl py-2 pr-1.5 text-sm transition ${
-        active ? 'bg-surface text-fg' : highlighted || unread ? 'text-fg hover:bg-surface' : 'text-muted hover:bg-surface hover:text-fg'
+        active
+          ? 'bg-surface text-fg'
+          : highlighted || unread
+            ? 'text-fg hover:bg-surface'
+            : 'text-muted hover:bg-surface hover:text-fg'
       }`}
       style={{ paddingLeft: 8 + depth * 14 }}
     >
@@ -150,7 +191,12 @@ function Row({ depth = 0, active, highlighted, icon, title, onClick, toggle, unr
           className="min-w-0 flex-1 rounded-md bg-raised px-1.5 text-sm text-fg focus:outline-none"
         />
       ) : (
-        <button type="button" onClick={onClick} onDoubleClick={() => setEditing(true)} className="min-w-0 flex-1 truncate text-left">
+        <button
+          type="button"
+          onClick={onClick}
+          onDoubleClick={() => setEditing(true)}
+          className="min-w-0 flex-1 truncate text-left"
+        >
           {title}
         </button>
       )}
@@ -173,7 +219,12 @@ function Row({ depth = 0, active, highlighted, icon, title, onClick, toggle, unr
           >
             <FiEdit2 className="text-xs" />
           </button>
-          <button type="button" onClick={onDelete} className="rounded-md p-1 text-faint hover:text-red-300" title="Delete">
+          <button
+            type="button"
+            onClick={onDelete}
+            className="rounded-md p-1 text-faint hover:text-red-300"
+            title="Delete"
+          >
             <FiTrash2 className="text-xs" />
           </button>
         </div>

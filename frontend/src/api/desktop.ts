@@ -33,7 +33,11 @@ export interface DesktopBridge {
   signOut(): Promise<Result<void>>
   openUsage(): void
   listModels(): Promise<Result<{ id: string; name: string }[]>>
-  stream(id: string, payload: { model: string; messages: Msg[] }, onDelta: (delta: string) => void): Promise<Result<void>>
+  stream(
+    id: string,
+    payload: { model: string; messages: Msg[] },
+    onDelta: (delta: string) => void,
+  ): Promise<Result<void>>
   cancel(id: string): void
   title(payload: { model: string; messages: Msg[] }): Promise<Result<string>>
 }

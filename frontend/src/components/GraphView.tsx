@@ -41,7 +41,11 @@ const ExchangeNode = memo(function ExchangeNode({ data }: NodeProps<Node<Exchang
   return (
     <div
       className={`rounded-xl border px-2.5 py-1.5 text-left transition ${
-        data.current ? 'border-fg bg-raised' : data.onPath ? 'border-line-strong bg-surface' : 'border-line bg-panel opacity-60'
+        data.current
+          ? 'border-fg bg-raised'
+          : data.onPath
+            ? 'border-line-strong bg-surface'
+            : 'border-line bg-panel opacity-60'
       }`}
       style={{ width: W, height: H }}
     >
@@ -71,7 +75,9 @@ function buildGraph(nodes: MsgNode[], threads: Thread[], bookmarks: Bookmark[], 
     return n.role === 'user' ? n.id : n.parentId
   }
   const threadColor = new Map(
-    [...threads].sort((a, b) => a.createdAt - b.createdAt).map((t, i) => [t.id, THREAD_COLORS[i % THREAD_COLORS.length]]),
+    [...threads]
+      .sort((a, b) => a.createdAt - b.createdAt)
+      .map((t, i) => [t.id, THREAD_COLORS[i % THREAD_COLORS.length]]),
   )
   const head = (tid: string | null) => threads.find((t) => t.id === tid)?.headNodeId ?? null
   const onPath = new Set(pathTo(index, head(currentId)).map((n) => n.id))
@@ -96,7 +102,8 @@ function buildGraph(nodes: MsgNode[], threads: Thread[], bookmarks: Bookmark[], 
         bookmarkColors: [
           ...new Set(bookmarks.filter((b) => b.nodeId === u.id || b.nodeId === reply?.id).map((b) => b.color)),
         ],
-        isBranchStart: !!u.anchor || threads.some((t) => t.id === u.threadId && t.parentThreadId && t.forkNodeId === u.parentId),
+        isBranchStart:
+          !!u.anchor || threads.some((t) => t.id === u.threadId && t.parentThreadId && t.forkNodeId === u.parentId),
         streaming: reply?.status === 'streaming',
         threadId: u.threadId,
       },
@@ -148,7 +155,11 @@ function Flow({ fullscreen }: { fullscreen: boolean }) {
   }, [rfNodes.length, fullscreen, paneSize, fitView])
 
   if (!rfNodes.length)
-    return <div className="flex h-full items-center justify-center px-6 text-center text-xs text-faint">The conversation map appears here once you start chatting.</div>
+    return (
+      <div className="flex h-full items-center justify-center px-6 text-center text-xs text-faint">
+        The conversation map appears here once you start chatting.
+      </div>
+    )
 
   return (
     <ReactFlow
@@ -179,7 +190,12 @@ export function GraphPanel() {
         <div className="flex h-12 shrink-0 items-center gap-2 px-4">
           <LuNetwork className="text-muted" />
           <h2 className="flex-1 text-sm text-fg">Conversation map</h2>
-          <button type="button" onClick={() => setGraphFullscreen(true)} className="rounded-lg p-1.5 text-faint transition hover:bg-surface hover:text-fg" title="Full screen">
+          <button
+            type="button"
+            onClick={() => setGraphFullscreen(true)}
+            className="rounded-lg p-1.5 text-faint transition hover:bg-surface hover:text-fg"
+            title="Full screen"
+          >
             <FiMaximize2 />
           </button>
         </div>
@@ -193,20 +209,25 @@ export function GraphPanel() {
       </section>
       {graphFullscreen &&
         createPortal(
-        <div className="fixed inset-0 z-50 flex flex-col bg-bg">
-          <div className="flex h-14 items-center gap-2 border-b border-line px-5">
-            <LuNetwork className="text-muted" />
-            <h2 className="flex-1 text-sm text-fg">Conversation map</h2>
-            <button type="button" onClick={() => setGraphFullscreen(false)} className="rounded-lg p-2 text-muted transition hover:bg-surface hover:text-fg" title="Close (Esc)">
-              <FiX />
-            </button>
-          </div>
-          <div className="flex-1">
-            <ReactFlowProvider>
-              <Flow fullscreen />
-            </ReactFlowProvider>
-          </div>
-        </div>,
+          <div className="fixed inset-0 z-50 flex flex-col bg-bg">
+            <div className="flex h-14 items-center gap-2 border-b border-line px-5">
+              <LuNetwork className="text-muted" />
+              <h2 className="flex-1 text-sm text-fg">Conversation map</h2>
+              <button
+                type="button"
+                onClick={() => setGraphFullscreen(false)}
+                className="rounded-lg p-2 text-muted transition hover:bg-surface hover:text-fg"
+                title="Close (Esc)"
+              >
+                <FiX />
+              </button>
+            </div>
+            <div className="flex-1">
+              <ReactFlowProvider>
+                <Flow fullscreen />
+              </ReactFlowProvider>
+            </div>
+          </div>,
           document.body,
         )}
     </>

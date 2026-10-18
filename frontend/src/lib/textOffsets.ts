@@ -7,9 +7,7 @@
 function textWalker(root: Node): TreeWalker {
   return document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
     acceptNode(node) {
-      return node.parentElement?.closest('[data-hl-ignore]')
-        ? NodeFilter.FILTER_REJECT
-        : NodeFilter.FILTER_ACCEPT
+      return node.parentElement?.closest('[data-hl-ignore]') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
     },
   })
 }

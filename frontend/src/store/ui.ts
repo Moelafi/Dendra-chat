@@ -115,7 +115,11 @@ export function navigate(threadId: string | null, focus?: FocusTarget, opts: { r
 export const openThread = (threadId: string, focus?: FocusTarget) => navigate(threadId, focus)
 
 /** The Navigation API (Chromium) knows about entries from before a reload; fall back to our own counter. */
-type NavigationLike = { canGoBack: boolean; canGoForward: boolean; addEventListener: (t: string, f: () => void) => void }
+type NavigationLike = {
+  canGoBack: boolean
+  canGoForward: boolean
+  addEventListener: (t: string, f: () => void) => void
+}
 const nav = (window as unknown as { navigation?: NavigationLike }).navigation
 
 function syncHistoryFlags() {

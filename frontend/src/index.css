@@ -47,25 +47,49 @@ body {
 }
 
 /* Highlights painted via the CSS Custom Highlight API. */
-::highlight(bm-yellow) { background-color: rgb(250 204 21 / 0.42); }
-::highlight(bm-green) { background-color: rgb(52 211 153 / 0.4); }
-::highlight(bm-blue) { background-color: rgb(96 165 250 / 0.45); }
-::highlight(bm-pink) { background-color: rgb(244 114 182 / 0.42); }
-::highlight(bm-purple) { background-color: rgb(167 139 250 / 0.45); }
+::highlight(bm-yellow) {
+  background-color: rgb(250 204 21 / 0.42);
+}
+::highlight(bm-green) {
+  background-color: rgb(52 211 153 / 0.4);
+}
+::highlight(bm-blue) {
+  background-color: rgb(96 165 250 / 0.45);
+}
+::highlight(bm-pink) {
+  background-color: rgb(244 114 182 / 0.42);
+}
+::highlight(bm-purple) {
+  background-color: rgb(167 139 250 / 0.45);
+}
 ::highlight(anchor) {
   text-decoration: underline dotted rgb(255 255 255 / 0.55);
   text-decoration-thickness: 1.5px;
   text-underline-offset: 4px;
 }
-::highlight(flash) { background-color: rgb(255 255 255 / 0.28); color: #fff; }
+::highlight(flash) {
+  background-color: rgb(255 255 255 / 0.28);
+  color: #fff;
+}
 
 @keyframes flash-ring {
-  0% { box-shadow: 0 0 0 0 rgb(255 255 255 / 0.25); }
-  100% { box-shadow: 0 0 0 12px rgb(255 255 255 / 0); }
+  0% {
+    box-shadow: 0 0 0 0 rgb(255 255 255 / 0.25);
+  }
+  100% {
+    box-shadow: 0 0 0 12px rgb(255 255 255 / 0);
+  }
 }
-.flash-ring { animation: flash-ring 1.2s ease-out 2; border-radius: 16px; }
+.flash-ring {
+  animation: flash-ring 1.2s ease-out 2;
+  border-radius: 16px;
+}
 
-@keyframes blink { 50% { opacity: 0; } }
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
 .caret::after {
   content: '';
   display: inline-block;
@@ -78,7 +102,10 @@ body {
   animation: blink 1s steps(1) infinite;
 }
 
-.scrollbar-thin { scrollbar-width: thin; scrollbar-color: rgb(255 255 255 / 0.1) transparent; }
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(255 255 255 / 0.1) transparent;
+}
 
 /* Markdown tweaks on top of prose-invert. */
 .md {
@@ -95,20 +122,65 @@ body {
   --tw-prose-th-borders: #333;
   --tw-prose-td-borders: #242424;
 }
-.md :where(h1, h2, h3, h4) { font-weight: 500; letter-spacing: -0.01em; }
-.md :where(a) { text-underline-offset: 3px; text-decoration-color: rgb(255 255 255 / 0.3); }
-.md :where(pre) { background: transparent; padding: 0; margin: 0; }
+.md :where(h1, h2, h3, h4) {
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.md :where(a) {
+  text-underline-offset: 3px;
+  text-decoration-color: rgb(255 255 255 / 0.3);
+}
+.md :where(pre) {
+  background: transparent;
+  padding: 0;
+  margin: 0;
+}
 .md :where(code):not(pre code)::before,
-.md :where(code):not(pre code)::after { content: none; }
-.md :where(code):not(pre code) { background: var(--color-raised); padding: 0.12em 0.4em; border-radius: 6px; font-weight: 400; font-size: 0.88em; }
-.md .hljs { background: transparent; }
-.md pre code { font-variant-ligatures: none; }
-.md table { display: block; overflow-x: auto; }
+.md :where(code):not(pre code)::after {
+  content: none;
+}
+.md :where(code):not(pre code) {
+  background: var(--color-raised);
+  padding: 0.12em 0.4em;
+  border-radius: 6px;
+  font-weight: 400;
+  font-size: 0.88em;
+}
+.md .hljs {
+  background: transparent;
+}
+.md pre code {
+  font-variant-ligatures: none;
+}
+.md table {
+  display: block;
+  overflow-x: auto;
+}
 
 /* React Flow dark skin. */
-.react-flow { --xy-background-color: transparent; --xy-edge-stroke: #333; }
-.react-flow__attribution { background: transparent; opacity: 0.3; font-size: 9px; }
-.react-flow__attribution a { color: #a3a3a3; }
-.react-flow__controls { box-shadow: none; border: 1px solid var(--color-line); border-radius: 10px; overflow: hidden; }
-.react-flow__controls-button { background: var(--color-surface); border-color: var(--color-line); fill: #a3a3a3; }
-.react-flow__controls-button:hover { background: var(--color-raised); }
+.react-flow {
+  --xy-background-color: transparent;
+  --xy-edge-stroke: #333;
+}
+.react-flow__attribution {
+  background: transparent;
+  opacity: 0.3;
+  font-size: 9px;
+}
+.react-flow__attribution a {
+  color: #a3a3a3;
+}
+.react-flow__controls {
+  box-shadow: none;
+  border: 1px solid var(--color-line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.react-flow__controls-button {
+  background: var(--color-surface);
+  border-color: var(--color-line);
+  fill: #a3a3a3;
+}
+.react-flow__controls-button:hover {
+  background: var(--color-raised);
+}

@@ -20,7 +20,11 @@ export function Notice() {
       role="status"
       className="fixed top-[72px] left-1/2 z-50 flex max-w-[min(32rem,calc(100vw-2rem))] -translate-x-1/2 items-center gap-3 rounded-2xl border border-line bg-panel py-2.5 pr-2 pl-4 text-sm text-muted shadow-2xl shadow-black"
     >
-      {notice.icon === 'trash' ? <FiTrash2 className="shrink-0 text-faint" /> : <LuGitBranch className="shrink-0 text-faint" />}
+      {notice.icon === 'trash' ? (
+        <FiTrash2 className="shrink-0 text-faint" />
+      ) : (
+        <LuGitBranch className="shrink-0 text-faint" />
+      )}
       <span className="min-w-0 truncate">{notice.text}</span>
       {notice.threadId && (
         <button
@@ -46,7 +50,12 @@ export function Notice() {
           <FiRotateCcw /> {notice.action.label}
         </button>
       )}
-      <button type="button" onClick={dismiss} className="shrink-0 rounded-full p-1.5 text-faint hover:bg-surface hover:text-fg" title="Dismiss">
+      <button
+        type="button"
+        onClick={dismiss}
+        className="shrink-0 rounded-full p-1.5 text-faint hover:bg-surface hover:text-fg"
+        title="Dismiss"
+      >
         <FiX />
       </button>
     </div>

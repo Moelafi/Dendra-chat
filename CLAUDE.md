@@ -13,12 +13,14 @@ The sign-in splash uses `lib/delta.ts`. `lib/flow.ts`, `lib/orb.ts` + `lib/shade
 cd frontend && npm install && npm run dev
 npm run build          # tsc -b && vite build
 npm run lint           # oxlint
+npm run format         # prettier --write . (format:check in CI); config in root .prettierrc.json
 npm test               # vitest run
 npx vitest run src/db/ops.test.ts -t "<test name>"   # single test
 
 # Desktop (Electron). Starts Vite itself if :5173 isn't already up; esbuild-watches main/preload and restarts Electron
 cd desktop && npm install && npm run dev
 npm run typecheck      # tsc --noEmit
+npm run format         # same Prettier config; vendor/ is ignored
 npm run build          # esbuild -> dist/main.js (ESM) + dist/preload.cjs (CJS, required for sandboxed preload)
 ```
 

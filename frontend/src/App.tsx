@@ -57,7 +57,7 @@ export default function App() {
   }, [setSession])
 
   // Models come from the signed-in ChatGPT account (desktop app only).
-  const accountKey = desktop ? (canChat ? session?.profileId ?? 'connected' : null) : 'web'
+  const accountKey = desktop ? (canChat ? (session?.profileId ?? 'connected') : null) : 'web'
   useEffect(() => {
     if (!accountKey) return
     fetchModels()
@@ -100,7 +100,13 @@ export default function App() {
         >
           <Sidebar onCollapse={() => setLeftOpen(false)} />
           {md && (
-            <ResizeHandle axis="x" edge="right" getSize={() => leftSize} onResize={(w) => setLeftW(clamp(w, 200, 420))} onReset={() => setLeftW(DEFAULTS.left)} />
+            <ResizeHandle
+              axis="x"
+              edge="right"
+              getSize={() => leftSize}
+              onResize={(w) => setLeftW(clamp(w, 200, 420))}
+              onReset={() => setLeftW(DEFAULTS.left)}
+            />
           )}
         </div>
       )}
@@ -109,7 +115,12 @@ export default function App() {
         <div className="relative min-w-0 flex-1">
           <div className="absolute top-3 left-2 z-10 flex gap-1">
             {!leftOpen && (
-              <button type="button" onClick={() => setLeftOpen(true)} className="rounded-lg p-2 text-faint transition hover:bg-surface hover:text-fg" title="Show sidebar">
+              <button
+                type="button"
+                onClick={() => setLeftOpen(true)}
+                className="rounded-lg p-2 text-faint transition hover:bg-surface hover:text-fg"
+                title="Show sidebar"
+              >
                 <FiSidebar />
               </button>
             )}
@@ -128,7 +139,6 @@ export default function App() {
             </button>
           )}
         </div>
-
       </main>
 
       {(leftOpen && !md) || (rightOpen && !lg) ? (
@@ -148,11 +158,22 @@ export default function App() {
           style={lg ? { width: rightSize } : undefined}
         >
           {lg && (
-            <ResizeHandle axis="x" edge="left" getSize={() => rightSize} onResize={(w) => setRightW(clamp(w, 260, 560))} onReset={() => setRightW(DEFAULTS.right)} />
+            <ResizeHandle
+              axis="x"
+              edge="left"
+              getSize={() => rightSize}
+              onResize={(w) => setRightW(clamp(w, 260, 560))}
+              onReset={() => setRightW(DEFAULTS.right)}
+            />
           )}
           <div className="flex min-h-0 flex-col" style={{ flex: SHOW_MAP ? `${split} 1 0` : '1 1 0' }}>
             <div className="flex justify-end px-2 pt-2">
-              <button type="button" onClick={() => setRightOpen(false)} className="rounded-lg p-1.5 text-faint transition hover:bg-surface hover:text-fg" title="Hide panel">
+              <button
+                type="button"
+                onClick={() => setRightOpen(false)}
+                className="rounded-lg p-1.5 text-faint transition hover:bg-surface hover:text-fg"
+                title="Hide panel"
+              >
                 <LuPanelRight />
               </button>
             </div>

@@ -22,7 +22,12 @@ export function useConversationData(conversationId: string | null) {
   )
   const threads = useLiveQuery(
     // Oldest first: branch menus and chips list the newest last.
-    async () => (conversationId ? (await db.threads.where('conversationId').equals(conversationId).toArray()).sort((a, b) => a.createdAt - b.createdAt) : []),
+    async () =>
+      conversationId
+        ? (await db.threads.where('conversationId').equals(conversationId).toArray()).sort(
+            (a, b) => a.createdAt - b.createdAt,
+          )
+        : [],
     [conversationId],
   )
   const bookmarks = useLiveQuery(
@@ -60,7 +65,10 @@ export function useThreadView(threadId: string | null): ThreadView {
             const [nodes, threads, bookmarks] = await Promise.all([
               db.nodes.where(byConversation).toArray(),
               // Oldest first: branch menus and chips list the newest last.
-              db.threads.where(byConversation).toArray().then((ts) => ts.sort((a, b) => a.createdAt - b.createdAt)),
+              db.threads
+                .where(byConversation)
+                .toArray()
+                .then((ts) => ts.sort((a, b) => a.createdAt - b.createdAt)),
               db.bookmarks.where(byConversation).toArray(),
             ])
             return { thread, nodes, threads, bookmarks }

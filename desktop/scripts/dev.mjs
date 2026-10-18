@@ -11,7 +11,11 @@ import { builds } from './build-config.mjs'
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const RENDERER_URL = process.env.DENDRA_RENDERER_URL ?? 'http://localhost:5173'
 
-const isUp = () => fetch(RENDERER_URL).then((r) => r.ok, () => false)
+const isUp = () =>
+  fetch(RENDERER_URL).then(
+    (r) => r.ok,
+    () => false,
+  )
 
 let vite
 if (await isUp()) {
@@ -55,18 +59,21 @@ for (const options of builds) {
   let first = true
   const ctx = await esbuild.context({
     ...options,
-    plugins: [{
-      name: 'restart-electron',
-      setup: (b) => b.onEnd((r) => {
-        if (r.errors.length) return
-        if (first) {
-          first = false
-          if (--pending === 0) startElectron()
-        } else {
-          restartElectron()
-        }
-      }),
-    }],
+    plugins: [
+      {
+        name: 'restart-electron',
+        setup: (b) =>
+          b.onEnd((r) => {
+            if (r.errors.length) return
+            if (first) {
+              first = false
+              if (--pending === 0) startElectron()
+            } else {
+              restartElectron()
+            }
+          }),
+      },
+    ],
   })
   await ctx.watch()
 }

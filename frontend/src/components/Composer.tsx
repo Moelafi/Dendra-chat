@@ -78,7 +78,15 @@ export function Composer({ threadId, streamingNodeId, placeholder, onStarted, au
 }
 
 /** Pill button that opens a small menu above the composer. */
-function Dropdown({ label, title, children }: { label: string; title?: string; children: (close: () => void) => React.ReactNode }) {
+function Dropdown({
+  label,
+  title,
+  children,
+}: {
+  label: string
+  title?: string
+  children: (close: () => void) => React.ReactNode
+}) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   useOnClickOutside(ref as React.RefObject<HTMLElement>, () => setOpen(false))

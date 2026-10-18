@@ -34,7 +34,11 @@ export function ChatPane({ threadId }: { threadId: string | null }) {
 
   const bookmarksByNode = useMemo(() => groupBy(bookmarks, (b) => b.nodeId), [bookmarks])
   const branchesByNode = useMemo(
-    () => groupBy(threads.filter((t) => t.anchor), (t) => t.anchor!.sourceNodeId),
+    () =>
+      groupBy(
+        threads.filter((t) => t.anchor),
+        (t) => t.anchor!.sourceNodeId,
+      ),
     [threads],
   )
   const streamingNodeId = path.at(-1)?.status === 'streaming' ? path.at(-1)!.id : null
@@ -135,7 +139,10 @@ export function ChatPane({ threadId }: { threadId: string | null }) {
         ref={scrollRef}
         onScroll={(e) => {
           const el = e.currentTarget
-          scrollMemory.set(threadId, { top: el.scrollTop, atBottom: el.scrollHeight - el.scrollTop - el.clientHeight < 80 })
+          scrollMemory.set(threadId, {
+            top: el.scrollTop,
+            atBottom: el.scrollHeight - el.scrollTop - el.clientHeight < 80,
+          })
         }}
         className="scrollbar-thin flex-1 overflow-y-auto"
       >
@@ -147,7 +154,8 @@ export function ChatPane({ threadId }: { threadId: string | null }) {
               className="mx-auto mb-3 flex items-center gap-2 rounded-full border border-line px-3.5 py-1.5 text-xs text-muted transition hover:border-line-strong hover:text-fg"
             >
               <LuLayers />
-              {showInherited ? 'Hide' : 'Show'} {inheritedCount} message{inheritedCount === 1 ? '' : 's'} of context from the parent thread
+              {showInherited ? 'Hide' : 'Show'} {inheritedCount} message{inheritedCount === 1 ? '' : 's'} of context
+              from the parent thread
             </button>
           )}
           {pinIndex === -1 ? (

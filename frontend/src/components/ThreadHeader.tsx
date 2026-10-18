@@ -32,7 +32,10 @@ export function ThreadHeader({ thread, threads }: { thread: Thread | undefined; 
         <FiArrowRight />
       </NavButton>
 
-      <nav aria-label="Thread path" className="scrollbar-none ml-1.5 flex min-w-0 flex-1 items-center gap-0.5 overflow-hidden text-sm">
+      <nav
+        aria-label="Thread path"
+        className="scrollbar-none ml-1.5 flex min-w-0 flex-1 items-center gap-0.5 overflow-hidden text-sm"
+      >
         {!thread && <span className="px-2 text-fg">New chat</span>}
         {crumbs.map((t, i) => {
           const last = i === crumbs.length - 1
@@ -56,7 +59,11 @@ export function ThreadHeader({ thread, threads }: { thread: Thread | undefined; 
                   last ? 'min-w-0 text-fg' : 'min-w-0 max-w-44 shrink text-muted hover:bg-surface hover:text-fg'
                 }`}
               >
-                {isRoot ? <FiMessageSquare className="shrink-0 text-faint" /> : <LuGitBranch className="shrink-0 text-faint" />}
+                {isRoot ? (
+                  <FiMessageSquare className="shrink-0 text-faint" />
+                ) : (
+                  <LuGitBranch className="shrink-0 text-faint" />
+                )}
                 <span className="truncate">{isRoot ? (conversation?.title ?? 'Main') : t.title}</span>
               </button>
               {last && !isRoot && (
@@ -80,7 +87,17 @@ export function ThreadHeader({ thread, threads }: { thread: Thread | undefined; 
   )
 }
 
-function NavButton({ title, disabled, onClick, children }: { title: string; disabled: boolean; onClick: () => void; children: React.ReactNode }) {
+function NavButton({
+  title,
+  disabled,
+  onClick,
+  children,
+}: {
+  title: string
+  disabled: boolean
+  onClick: () => void
+  children: React.ReactNode
+}) {
   return (
     <button
       type="button"

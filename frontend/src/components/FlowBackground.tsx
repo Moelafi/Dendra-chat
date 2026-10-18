@@ -8,5 +8,7 @@ export function FlowBackground({ className = '' }: { className?: string }) {
     () => startFlow(ref.current!, { reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches }),
     [],
   )
-  return <canvas ref={ref} aria-hidden="true" className={`pointer-events-none absolute inset-0 size-full ${className}`} />
+  return (
+    <canvas ref={ref} aria-hidden="true" className={`pointer-events-none absolute inset-0 size-full ${className}`} />
+  )
 }

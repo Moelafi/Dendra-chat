@@ -47,7 +47,12 @@ describe('conversation tree', () => {
     await appendMessage(branch.id, 'assistant', 'explained')
 
     expect(await path(conv.id, branch.id)).toEqual([
-      'q1', 'a1 with a key insight', 'q2', 'a2', 'what is it?', 'explained',
+      'q1',
+      'a1 with a key insight',
+      'q2',
+      'a2',
+      'what is it?',
+      'explained',
     ])
     // main thread is untouched and can keep going linearly
     await appendMessage(main, 'user', 'q3')

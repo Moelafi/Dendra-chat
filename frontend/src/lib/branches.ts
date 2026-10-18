@@ -29,7 +29,9 @@ export async function closeBranch(threadId: string): Promise<void> {
   const subs = snapshot.threads.length - 1
   const parts = [
     subs ? `${subs} sub-branch${subs === 1 ? '' : 'es'}` : '',
-    snapshot.bookmarks.length ? `${snapshot.bookmarks.length} bookmark${snapshot.bookmarks.length === 1 ? '' : 's'}` : '',
+    snapshot.bookmarks.length
+      ? `${snapshot.bookmarks.length} bookmark${snapshot.bookmarks.length === 1 ? '' : 's'}`
+      : '',
   ].filter(Boolean)
   useUI.getState().showNotice({
     icon: 'trash',

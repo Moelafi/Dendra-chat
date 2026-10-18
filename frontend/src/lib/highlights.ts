@@ -4,14 +4,7 @@
  * Nothing in the rendered markdown DOM is mutated.
  */
 
-export type HighlightStyle =
-  | 'bm-yellow'
-  | 'bm-green'
-  | 'bm-blue'
-  | 'bm-pink'
-  | 'bm-purple'
-  | 'anchor'
-  | 'flash'
+export type HighlightStyle = 'bm-yellow' | 'bm-green' | 'bm-blue' | 'bm-pink' | 'bm-purple' | 'anchor' | 'flash'
 
 const owners = new Map<string, { style: HighlightStyle; range: Range }[]>()
 const supported = typeof CSS !== 'undefined' && 'highlights' in CSS

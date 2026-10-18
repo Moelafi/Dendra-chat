@@ -120,7 +120,16 @@ export function startDelta(canvas: HTMLCanvasElement, opts: { reducedMotion?: bo
         for (const side of [-1, 1]) {
           // Fan out, but never point backwards or straight up or down.
           const heading = Math.max(-0.9, Math.min(0.9, t.heading + side * spread * 0.6))
-          next.push({ ...t, angle: t.angle + side * spread, heading, turn: side * 0.004, width: t.width * 0.8, depth: t.depth + 1, dist: 0, splitAt: rand(90, 180) })
+          next.push({
+            ...t,
+            angle: t.angle + side * spread,
+            heading,
+            turn: side * 0.004,
+            width: t.width * 0.8,
+            depth: t.depth + 1,
+            dist: 0,
+            splitAt: rand(90, 180),
+          })
         }
       } else next.push(t)
     }

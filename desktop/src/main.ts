@@ -79,9 +79,13 @@ function trusted(event: { senderFrame: { url: string } | null }): boolean {
   }
 }
 
-function handle<A extends unknown[], T>(channel: string, fn: (event: IpcMainInvokeEvent, ...args: A) => Promise<Result<T>>) {
+function handle<A extends unknown[], T>(
+  channel: string,
+  fn: (event: IpcMainInvokeEvent, ...args: A) => Promise<Result<T>>,
+) {
   ipcMain.handle(channel, (event, ...args) => {
-    if (!trusted(event)) return { ok: false, error: { code: 'forbidden', message: 'Untrusted caller.', retryable: false } }
+    if (!trusted(event))
+      return { ok: false, error: { code: 'forbidden', message: 'Untrusted caller.', retryable: false } }
     return fn(event, ...(args as A))
   })
 }
