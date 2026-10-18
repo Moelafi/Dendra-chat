@@ -9,7 +9,7 @@
 Highlight any part of a reply to bookmark it, or ask about it in a side branch without derailing the main conversation.
 Your chats never leave your computer.
 
-React · TypeScript · IndexedDB · FastAPI · Electron
+React · TypeScript · IndexedDB · Electron
 
 </div>
 
@@ -44,38 +44,18 @@ Dendra treats a conversation as a **tree** instead of a list.
 
 Dendra has **no server-side storage and no account system of its own.**
 
-- **All chats live in your browser's IndexedDB** (via [Dexie](https://dexie.org)): conversations, branches, messages and bookmarks. Nothing is synced or uploaded anywhere.
-- **The web version's backend is a stateless proxy.** It holds your OpenAI API key and streams the model's reply back, and that's it. It has no database and writes nothing to disk.
+- **All chats live in the app's IndexedDB** (via [Dexie](https://dexie.org)): conversations, branches, messages and bookmarks. Nothing is synced or uploaded anywhere.
 - **The model only sees what it needs.** Each request sends just the path from the start of the conversation to the message being answered, not your other branches or other chats.
 - **In the desktop app, sign-in tokens never reach the UI.** They stay in Electron's main process, encrypted with the macOS Keychain (`safeStorage`) under `~/Library/Application Support/Dendra/`. The interface only ever sees your session status and the text of replies.
-- **Deleting is really deleting.** Remove a chat or branch and it's gone from local storage. The desktop app and the browser version keep separate data.
+- **Deleting is really deleting.** Remove a chat or branch and it's gone from local storage.
 
-Because storage is local, clearing your browser's site data (or deleting the app's data folder) erases your chats. There's no cloud copy.
+Because storage is local, deleting the app's data folder erases your chats. There's no cloud copy.
 
-### How conversations are stored
+## Running it
 
-Every message is stored **once**, as a node that points to its parent, so a conversation is a tree. A *thread* is a named path through that tree. A branch hangs off a point in its parent thread, so it inherits all of that context without copying a single message.
+Dendra is a macOS desktop app built with Electron. It reaches the model with **Sign in with ChatGPT**, so requests are billed to your own **ChatGPT Plus or Pro** plan. There's no API key and no server to run.
 
-| Store           | Holds                                                         |
-|-----------------|---------------------------------------------------------------|
-| `conversations` | title, main thread                                            |
-| `threads`       | parent thread, head message, fork point, snippet it came from |
-| `nodes`         | one message each: role, text, parent, status, quoted snippet  |
-| `bookmarks`     | message + character range, colour, note                       |
-
-Highlights are drawn with the [CSS Custom Highlight API](https://developer.mozilla.org/docs/Web/API/CSS_Custom_Highlight_API), so the rendered Markdown is never modified, and bookmarks are stored as plain character offsets.
-
-## Two ways to run it
-
-|                 | Desktop app (macOS)                                      | Web version                                  |
-|-----------------|----------------------------------------------------------|----------------------------------------------|
-| Pays for usage  | Your own **ChatGPT Plus or Pro** plan                    | Your **OpenAI API key** (pay per token)      |
-| Needs           | macOS 14+, Node 22.12+                                    | Node 22.12+, Python 3.14+, [uv](https://docs.astral.sh/uv/) |
-| How it connects | Sign in with ChatGPT, directly from the app              | A small local Python server holds the key   |
-
-Both run the exact same React app. At runtime it checks whether it's inside Electron and picks the matching way to reach the model.
-
-### Desktop app
+**Needs:** macOS 14+, Node 22.12+.
 
 ```bash
 cd desktop
@@ -87,36 +67,14 @@ This starts the frontend dev server if it isn't already running, builds the Elec
 
 > If `npm run dev` starts Electron as plain Node, your terminal has `ELECTRON_RUN_AS_NODE` set (VS Code's terminal does this). The dev script removes it for the Electron process, but launching Electron another way may need `unset ELECTRON_RUN_AS_NODE`.
 
-### Web version
-
-```bash
-# 1. Backend: put your key in backend/.env (see backend/.env.example)
-cd backend
-cp .env.example .env        # then edit OPENAI_API_KEY
-uv run uvicorn main:app --host 127.0.0.1 --port 8765 --reload
-
-# 2. Frontend, in a second terminal (proxies /api to :8765)
-cd frontend
-npm install
-npm run dev                 # http://localhost:5173
-```
-
-Optional backend settings in `backend/.env`:
-
-- `MAX_OUTPUT_TOKENS`: caps reply length (unset means the model's maximum).
-- The default model is `DEFAULT_MODEL` in `backend/main.py`. The model picker lists the chat models your key can use.
-
-The backend runs on port 8765 because 8000 is often taken (e.g. by Docker).
-
 ## Project structure
 
 ```
-frontend/   React app shared by both versions
+frontend/   React app (the UI Electron loads)
   src/db/       IndexedDB schema, tree helpers and all data operations
   src/lib/      streaming, highlights, text offsets, splash animation
-  src/api/      the two ways of reaching the model (Electron bridge or HTTP)
+  src/api/      model access through the Electron bridge
   src/components/
-backend/    FastAPI proxy for the web version (one file: main.py)
 desktop/    Electron shell with Sign in with ChatGPT
   src/main.ts     window, IPC handlers, ChatGPT session
   src/preload.ts  the only API the UI gets: session state and text streaming
@@ -134,7 +92,7 @@ cd desktop
 npm run typecheck
 ```
 
-**Tech stack:** React 19, TypeScript, Vite, Tailwind CSS 4, Dexie (IndexedDB), Zustand, react-markdown with syntax highlighting, FastAPI and the OpenAI Responses API (web), Electron (desktop).
+**Tech stack:** React 19, TypeScript, Vite, Tailwind CSS 4, Dexie (IndexedDB), Zustand, react-markdown with syntax highlighting, Electron with Sign in with ChatGPT.
 
 ## Licensing note
 

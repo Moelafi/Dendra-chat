@@ -2,8 +2,7 @@ import { useRef, useState } from 'react'
 import { FiArrowUp, FiCheck, FiChevronDown, FiSquare } from 'react-icons/fi'
 import { useOnClickOutside } from 'usehooks-ts'
 import { sendMessage, stop } from '../lib/chat'
-import { desktop } from '../api/desktop'
-import { useUI, type Verbosity } from '../store/ui'
+import { useUI } from '../store/ui'
 
 interface Props {
   threadId: string | null
@@ -52,8 +51,6 @@ export function Composer({ threadId, streamingNodeId, placeholder, onStarted, au
       <div className="flex items-center justify-between px-3 pb-3">
         <div className="flex items-center gap-1.5">
           <ModelPicker />
-          {/* Reply length maps to API verbosity, which the ChatGPT-plan route doesn't take. */}
-          {!desktop && <LengthPicker />}
         </div>
         {streamingNodeId ? (
           <button
@@ -77,41 +74,6 @@ export function Composer({ threadId, streamingNodeId, placeholder, onStarted, au
         )}
       </div>
     </div>
-  )
-}
-
-const LENGTHS: { value: Verbosity; label: string; hint: string }[] = [
-  { value: 'low', label: 'Concise', hint: 'Short, to the point' },
-  { value: 'medium', label: 'Balanced', hint: 'The model default' },
-  { value: 'high', label: 'Detailed', hint: 'Longer, thorough replies' },
-]
-
-function LengthPicker() {
-  const { verbosity, setVerbosity } = useUI()
-  return (
-    <Dropdown label={LENGTHS.find((l) => l.value === verbosity)?.label ?? 'Detailed'} title="Reply length">
-      {(close) =>
-        LENGTHS.map((l) => (
-          <button
-            key={l.value}
-            type="button"
-            onClick={() => {
-              setVerbosity(l.value)
-              close()
-            }}
-            className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-left hover:bg-surface ${
-              l.value === verbosity ? 'text-fg' : 'text-muted'
-            }`}
-          >
-            <span>
-              <span className="block text-[13px]">{l.label}</span>
-              <span className="block text-xs text-faint">{l.hint}</span>
-            </span>
-            {l.value === verbosity && <FiCheck className="text-fg" />}
-          </button>
-        ))
-      }
-    </Dropdown>
   )
 }
 
@@ -143,7 +105,7 @@ function Dropdown({ label, title, children }: { label: string; title?: string; c
 export function ModelPicker() {
   const { models, modelLabels, model, setModel } = useUI()
   return (
-    <Dropdown label={modelLabels[model] ?? (model || (desktop ? 'No models' : 'No backend'))} title="Model">
+    <Dropdown label={modelLabels[model] ?? (model || 'No models')} title="Model">
       {(close) =>
         models.map((m) => (
           <button

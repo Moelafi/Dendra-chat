@@ -2,9 +2,6 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { SessionState } from '../api/desktop'
 
-/** Reply length: maps to the API's text verbosity. */
-export type Verbosity = 'low' | 'medium' | 'high'
-
 export interface Notice {
   id: number
   text: string
@@ -43,7 +40,6 @@ interface UIState {
   model: string
   /** ChatGPT account session (desktop app only; null in the browser). */
   session: SessionState | null
-  verbosity: Verbosity
   graphFullscreen: boolean
   /** Small transient message, e.g. "Asked in a new branch · Open". */
   notice: Notice | null
@@ -52,7 +48,6 @@ interface UIState {
   setModels: (models: string[], fallback: string, labels?: Record<string, string>) => void
   setSession: (session: SessionState) => void
   setModel: (model: string) => void
-  setVerbosity: (v: Verbosity) => void
   setGraphFullscreen: (v: boolean) => void
   focusNode: (nodeId: string, start?: number, end?: number) => void
 }
@@ -70,7 +65,6 @@ export const useUI = create<UIState>()(
       modelLabels: {},
       model: '',
       session: null,
-      verbosity: 'high',
       graphFullscreen: false,
       notice: null,
       showNotice: (n) => set({ notice: { ...n, id: Date.now() } }),
@@ -79,13 +73,12 @@ export const useUI = create<UIState>()(
         set({ models, modelLabels: labels, model: models.includes(get().model) ? get().model : fallback }),
       setSession: (session) => set({ session }),
       setModel: (model) => set({ model }),
-      setVerbosity: (verbosity) => set({ verbosity }),
       setGraphFullscreen: (graphFullscreen) => set({ graphFullscreen }),
       focusNode: (nodeId, start, end) => set({ focus: { nodeId, start, end, nonce: Date.now() } }),
     }),
     {
       name: 'branchchat-ui',
-      partialize: (s) => ({ currentThreadId: s.currentThreadId, model: s.model, verbosity: s.verbosity }),
+      partialize: (s) => ({ currentThreadId: s.currentThreadId, model: s.model }),
     },
   ),
 )

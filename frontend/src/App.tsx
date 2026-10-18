@@ -43,7 +43,7 @@ export default function App() {
   const rightColRef = useRef<HTMLDivElement>(null)
   const leftSize = clamp(leftW, 200, 420)
   const rightSize = clamp(rightW, 260, 560)
-  const [backendError, setBackendError] = useState<string | null>(null)
+  const [loadError, setLoadError] = useState<string | null>(null)
 
   useEffect(() => {
     void recoverInterruptedStreams()
@@ -56,16 +56,16 @@ export default function App() {
     return desktop.onSession(setSession)
   }, [setSession])
 
-  // Models come from the backend (web) or the signed-in ChatGPT account (desktop).
+  // Models come from the signed-in ChatGPT account (desktop app only).
   const accountKey = desktop ? (canChat ? session?.profileId ?? 'connected' : null) : 'web'
   useEffect(() => {
     if (!accountKey) return
     fetchModels()
       .then((r) => {
         setModels(r.models, r.default, r.labels)
-        if (r.error) setBackendError(r.error)
+        if (r.error) setLoadError(r.error)
       })
-      .catch((e: Error) => setBackendError(`${e.message}. Is the Python backend running on :8765?`))
+      .catch((e: Error) => setLoadError(e.message))
   }, [accountKey, setModels])
 
   // On small screens, picking something in a drawer should reveal the chat.
@@ -173,11 +173,11 @@ export default function App() {
         </div>
       )}
 
-      {backendError && (
+      {loadError && (
         <div className="fixed bottom-4 left-1/2 z-50 flex max-w-lg -translate-x-1/2 items-center gap-2.5 rounded-2xl border border-red-500/25 bg-panel px-4 py-3 text-sm text-red-300 shadow-2xl shadow-black">
           <FiAlertTriangle className="shrink-0" />
-          <span className="flex-1">{backendError}</span>
-          <button type="button" onClick={() => setBackendError(null)} className="text-red-300 hover:text-white">
+          <span className="flex-1">{loadError}</span>
+          <button type="button" onClick={() => setLoadError(null)} className="text-red-300 hover:text-white">
             Dismiss
           </button>
         </div>

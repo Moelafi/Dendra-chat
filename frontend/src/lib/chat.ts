@@ -34,7 +34,6 @@ async function runAssistant(node: MsgNode, model: string): Promise<boolean> {
         flushTimer ??= setTimeout(flush, 50)
       },
       controller.signal,
-      useUI.getState().verbosity,
     )
     if (flushTimer) clearTimeout(flushTimer)
     await db.nodes.update(node.id, { content, status: 'complete', error: undefined })

@@ -6,7 +6,7 @@ import { CHATGPT_USAGE_URL, ChatGPTError, createChatGPT, type SessionState } fro
 import { createElectronCredentialEncryption } from './credential-encryption.js'
 
 /**
- * Dendra desktop shell. The renderer is the same React app as the web version;
+ * Dendra desktop shell. The renderer is the React app in frontend/;
  * here it talks to ChatGPT through the user's own plan via Sign in with ChatGPT.
  * Tokens stay in this process (encrypted with the Keychain); the renderer only
  * ever sees session state and text.

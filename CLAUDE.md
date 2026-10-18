@@ -9,10 +9,7 @@ The sign-in splash uses `lib/delta.ts`. `lib/flow.ts`, `lib/orb.ts` + `lib/shade
 ## Commands
 
 ```bash
-# Backend (browser version only). Needs backend/.env with OPENAI_API_KEY (see .env.example; optional MAX_OUTPUT_TOKENS)
-cd backend && uv run uvicorn main:app --host 127.0.0.1 --port 8765 --reload
-
-# Frontend (Vite on :5173, proxies /api to :8765)
+# Frontend (Vite on :5173; only reaches a model when loaded inside Electron)
 cd frontend && npm install && npm run dev
 npm run build          # tsc -b && vite build
 npm run lint           # oxlint
@@ -25,21 +22,20 @@ npm run typecheck      # tsc --noEmit
 npm run build          # esbuild -> dist/main.js (ESM) + dist/preload.cjs (CJS, required for sandboxed preload)
 ```
 
-Backend port is 8765 on purpose (8000 is often taken). Desktop requires macOS 14+, Node 22.12+. The dev script strips `ELECTRON_RUN_AS_NODE` (set by VS Code terminals) so Electron doesn't run as plain Node.
+Desktop requires macOS 14+, Node 22.12+. The dev script strips `ELECTRON_RUN_AS_NODE` (set by VS Code terminals) so Electron doesn't run as plain Node.
 
 ## Architecture
 
-Three packages, one React app:
+Two packages, one React app:
 
 - `frontend/` — React 19 + TS + Vite, Tailwind v4, React Flow (`@xyflow/react` + dagre) for the map, Dexie (IndexedDB) for all data, zustand for UI state (`src/store/ui.ts`, persisted).
-- `backend/main.py` — stateless FastAPI proxy holding the OpenAI key. Endpoints `/api/models`, `/api/chat` (SSE: `delta` / `error` / `done` events, Responses API), `/api/title`. Stores nothing. `DEFAULT_MODEL` lives here.
-- `desktop/` — Electron shell that loads the same frontend and calls ChatGPT via "Sign in with ChatGPT" on the user's own plan (no backend, no API key).
+- `desktop/` — Electron shell that loads the same frontend and calls ChatGPT via "Sign in with ChatGPT" on the user's own plan (no server, no API key).
 
-### Two transports, one surface
+### Desktop bridge
 
-`frontend/src/api/client.ts` (`fetchModels`, `streamChat`, `fetchTitle`) picks the transport at runtime: if `window.dendra` exists (Electron preload bridge) it uses IPC, otherwise it hits the Python backend. When changing the bridge, keep **three places in sync**: `desktop/src/preload.ts`, the `DesktopBridge` type in `frontend/src/api/desktop.ts`, and the IPC handlers in `desktop/src/main.ts`. Each transport has its own `SYSTEM_PROMPT` (`backend/main.py`, `desktop/src/main.ts`); the desktop one deliberately doesn't mention Dendra.
+`frontend/src/api/client.ts` (`fetchModels`, `streamChat`, `fetchTitle`) talks to the model over IPC through `window.dendra` (Electron preload bridge). In a plain browser the bridge is missing, so these return an error / no-op. When changing the bridge, keep **three places in sync**: `desktop/src/preload.ts`, the `DesktopBridge` type in `frontend/src/api/desktop.ts`, and the IPC handlers in `desktop/src/main.ts`. The `SYSTEM_PROMPT` lives in `desktop/src/main.ts` and deliberately doesn't mention Dendra.
 
-Desktop security model: OAuth tokens never reach the renderer; they stay in the main process, encrypted via `safeStorage` (Keychain). IPC handlers reject callers whose origin isn't the renderer URL (`trusted()` in `main.ts`). The desktop route doesn't take a verbosity setting, so the reply-length picker is hidden there.
+Desktop security model: OAuth tokens never reach the renderer; they stay in the main process, encrypted via `safeStorage` (Keychain). IPC handlers reject callers whose origin isn't the renderer URL (`trusted()` in `main.ts`).
 
 `desktop/vendor/siwc-local` is the `@siwc/local` SDK vendored **unmodified** (noncommercial license, not on npm). Don't edit it; to update, replace `src/` and bump the commit in `VENDORED.md`.
 

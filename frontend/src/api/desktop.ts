@@ -1,7 +1,7 @@
 /**
  * The Electron preload bridge (desktop/src/preload.ts). Present only in the
- * desktop app; in a normal browser `desktop` is undefined and the app uses the
- * Python backend instead. Keep these types in sync with the preload.
+ * desktop app; in a normal browser `desktop` is undefined and the app can't
+ * reach a model. Keep these types in sync with the preload.
  */
 
 export interface SessionState {
