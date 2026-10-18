@@ -12,7 +12,6 @@ Sign in with your ChatGPT account, and your chats are stored only on your Mac.
 <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
 <img src="https://img.shields.io/badge/💾_IndexedDB-FFCA28?style=for-the-badge" alt="IndexedDB" />
 <img src="https://img.shields.io/badge/Electron-47848F?style=for-the-badge&logo=electron&logoColor=white" alt="Electron" />
-<img src="https://img.shields.io/badge/macOS-000000?style=for-the-badge&logo=apple&logoColor=white" alt="macOS" />
 
 </div>
 
